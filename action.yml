@@ -191,7 +191,6 @@ runs:
                 "${CONFIG_PATH[@]}"\
                 "${ALT_REGISTRY[@]}"\
                 "${MANIFEST_PATH[@]}"\
-                "${REGISTRY_MANIFEST_PATH[@]}"\
                 "${FORGE[@]}"\
                 "${TOKEN[@]}"\
                 "${VERBOSE[@]}"\
