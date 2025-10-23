@@ -24,6 +24,10 @@ inputs:
       "Path to the Cargo.toml of the project you want to update. If not provided, release-plz will use the Cargo.toml of the
       root directory. Both Cargo workspaces and single packages are supported."
     required: false
+  registry_manifest_path:
+    description:
+      "Path to the Cargo.toml contained in the released version of the project you want to update. If not provided, the packages of your project will be compared with the ones published in the cargo registry. Normally, this parameter is used only if the published version of your project is already available locally. For example, it could be the path to the project with a `git checkout` on its latest tag. The git history of this project should be behind the one of theproject you want to update"
+    required: false
   project_manifest:
     description: "Deprecated. Use `manifest_path` instead."
     required: false
@@ -143,6 +147,14 @@ runs:
             MANIFEST_PATH=()
         fi
 
+        if [[ -n "${{ inputs.registry_manifest_path }}" ]]
+        then
+            echo "using registry manifest path '${{ inputs.registry_manifest_path }}'"
+            REGISTRY_MANIFEST_PATH=("--registry-manifest-path" "${{ inputs.registry_manifest_path }}")
+        else
+            REGISTRY_MANIFEST_PATH=()
+        fi
+
         if [[ -z "${{ inputs.command }}" || "${{ inputs.command }}" == "release-pr" ]]
         then
             echo "-- Running release-plz release-pr --"
@@ -152,6 +164,7 @@ runs:
                 "${CONFIG_PATH[@]}"\
                 "${ALT_REGISTRY[@]}"\
                 "${MANIFEST_PATH[@]}"\
+                "${REGISTRY_MANIFEST_PATH[@]}"\
                 "${FORGE[@]}"\
                 "${VERBOSE[@]}"\
                 -o json)
@@ -178,6 +191,7 @@ runs:
                 "${CONFIG_PATH[@]}"\
                 "${ALT_REGISTRY[@]}"\
                 "${MANIFEST_PATH[@]}"\
+                "${REGISTRY_MANIFEST_PATH[@]}"\
                 "${FORGE[@]}"\
                 "${TOKEN[@]}"\
                 "${VERBOSE[@]}"\
