@@ -94,7 +94,7 @@ runs:
 
         if [[ -n "${{ inputs.verbose }}" ]]
         then
-            VERBOSE=("-v")
+            VERBOSE=("-vv")
         else
             VERBOSE=()
         fi
